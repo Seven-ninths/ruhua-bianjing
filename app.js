@@ -4,31 +4,68 @@ const roles = [
   {
     id: "traveler", location: "城郊", name: "赶路人",
     x: 79.79, y: 82.5, label: "沿汴河往城里走",
-    pins: ["沿着土路往前，近处传来脚步和水声。", "抬起视线，前方陆续出现赶路的人。", "脚下的路与沿河的屋舍一同向前延伸。"],
     fact: "画卷前段表现汴京城郊。道路穿过田野与低矮屋舍，路上可见往来的人物。",
-    staging: "这里借一位赶路人的视角重组原画空间。沿河的步行路线、镜头和脚步声属于情景演绎。",
-    camera: ["scale(1.21) translate(2%, -4%)", "scale(1.25) translate(.2%, 2.5%)", "scale(1.30) translate(-3.5%, 4%)"],
-    near: ["scale(1.30) translate(4%, -5%)", "scale(1.32) translate(0, 3%)", "scale(1.39) translate(-6%, 5%)"]
+    staging: "沿河行走和在窄路上与驮货的牲畜相遇，是根据画里的道路、行旅与牲畜构思的情节。"
   },
   {
     id: "boatman", location: "虹桥", name: "船工",
     x: 51.62, y: 30.5, label: "随漕船靠近桥孔",
-    pins: ["抬头看看桥孔。木梁正在眼前一点点变近。", "目光落回甲板，同伴正把桅杆放低。", "水拍着船身，桥上的声音从头顶传来。"],
     fact: "桥下的漕船正放倒桅杆，准备穿过桥孔。船工忙着操作，桥上有人驻足观看。",
-    staging: "镜头以船工的视高看桥孔和同伴。过桥时的具体节奏、船身晃动和环境声根据原画细节重新构思。",
-    camera: ["scale(1.16) translate(0, 6%)", "scale(1.26) translate(-2%, -5.5%)", "scale(1.34) translate(-4%, -1%)"],
-    near: ["scale(1.24) translate(0, 8%)", "scale(1.33) translate(-3%, -6%)", "scale(1.41) translate(-6%, -2%)"]
+    staging: "拉绳降低桅杆是为网页设计的简化操作。放桅节奏、船身晃动与场景声响属于情景演绎。"
   },
   {
     id: "shopkeeper", location: "街市", name: "店伙计",
     x: 15.83, y: 43, label: "从铺子里望向街面",
-    pins: ["从柜台后抬头，店门外就是往来不断的街道。", "有人在铺门前停下来，柜台边响起一声轻碰。", "向门口迎几步，叫卖和脚步的声音更近了。"],
     fact: "长卷后段描绘临街商铺与穿行其间的人物。沿街店面与道路直接相连。",
-    staging: "店伙计、停在门口的客人和迎客的动作是场景设定。柜台位置和环境声按第一人称体验设计。",
-    camera: ["scale(1.13) translate(1.5%, -3.5%)", "scale(1.21) translate(-1%, 1%)", "scale(1.34) translate(-4%, 1%)"],
-    near: ["scale(1.19) translate(2%, -4%)", "scale(1.29) translate(-2%, 2%)", "scale(1.43) translate(-6%, 2%)"]
+    staging: "这次迎客与递茶是基于画中街市和店铺设计的情节。店伙计、客人和他们的动作属于情景演绎。"
   }
 ];
+
+const stories = {
+  traveler: {
+    opening: { caption: "土路沿着汴河伸向城里。前面的拐弯处传来蹄声。", actions: [
+      { label: "沿土路往前走", next: "encounter", motion: 800 }
+    ] },
+    encounter: { caption: "驮着货的驴迎面过来，路在这里收窄了。你准备在哪里让它先过？", actions: [
+      { label: "侧身让到河边", next: "riverbank", motion: 1500 },
+      { label: "退到篱笆旁", next: "fence", motion: 1500 }
+    ] },
+    riverbank: { caption: "你站到河边，驮货的驴从身后过去。船桨划开近处的水，路重新空了出来。", actions: [
+      { label: "继续往城里走", next: "arrived", motion: 800 }
+    ] },
+    fence: { caption: "你贴着篱笆等了一会儿。驮货的驴擦着路沿过去，蹄声渐渐远了。", actions: [
+      { label: "继续往城里走", next: "arrived", motion: 800 }
+    ] },
+    arrived: { caption: "绕过弯道，沿河的屋舍逐渐密起来。你继续朝城里走。" }
+  },
+  boatman: {
+    opening: { caption: "漕船快到虹桥了。船头朝着桥孔，你得先看一眼上方的余量。", actions: [
+      { label: "抬头看看桥孔", next: "check", motion: 630 }
+    ] },
+    check: { caption: "桅杆还太高，得在它碰到木梁前放低。同伴已经在等你的示意。", actions: [
+      { label: "低头握住放桅绳", next: "lower", motion: 500 }
+    ] },
+    lower: { caption: "向下拖动绳结，分三次松放。也可以点下方按钮，观察桅杆每次降到哪里。", actions: [
+      { label: "放一截绳", pull: true, motion: 650 }
+    ], object: "放桅绳" },
+    clear: { caption: "桅杆已经低过桥梁。绳索在手里绷住，现在可以让船继续向前。", actions: [
+      { label: "稳住桅杆，撑船过桥", next: "passed", motion: 1200 }
+    ] },
+    passed: { caption: "木梁从头顶掠过，河面重新亮起来。漕船平稳过桥。" }
+  },
+  shopkeeper: {
+    opening: { caption: "你站在铺子的柜台后。门口有一位客人放慢脚步，正往里看。", actions: [
+      { label: "招呼客人进来", next: "greet", motion: 850 }
+    ] },
+    greet: { caption: "客人走到柜台前，想喝口茶。茶碗在你手边。", actions: [
+      { label: "端起茶碗", next: "holding", motion: 670 }
+    ], object: "茶碗" },
+    holding: { caption: "客人伸出双手。把茶碗朝客人拖过去，或点下方按钮递茶。", actions: [
+      { label: "把茶递给客人", next: "served", motion: 850 }
+    ], object: "拖碗递茶" },
+    served: { caption: "客人接住茶碗，收回双手。门外的车轮和脚步声还在继续。" }
+  }
+};
 
 const $ = (id) => document.getElementById(id);
 const viewport = $("viewport");
@@ -39,7 +76,6 @@ const scene = $("scene");
 const evidence = $("evidence");
 const soundToggle = $("sound-toggle");
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-const duration = 15000;
 const sound = new Audio();
 const visited = new Set();
 let playing = null;
@@ -192,71 +228,195 @@ viewport.addEventListener("keydown", (event) => {
   event.preventDefault();
 });
 
+const stage = $("scene-stage");
+const sceneLook = $("scene-look");
+const actionList = $("scene-actions");
+const objectButton = $("scene-object-button");
+const teaBowl = $("tea-bowl");
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+let lookDrag = null;
+let objectDrag = null;
+let objectWasDragged = false;
+
 function openScene(role) {
   if (playing || scene.open || evidence.open) return;
-  const artwork = `url("./assets/${role.id}.webp")`;
-  const base = $("scene-art");
-  const near = $("scene-near");
-  base.style.backgroundImage = artwork;
-  near.style.backgroundImage = artwork;
+  playing = { role, phase: "opening", pulls: 0, timer: 0, left: viewport.scrollLeft, lookX: 0, lookY: 0 };
+  stage.dataset.role = role.id;
+  sceneLook.tabIndex = reduceMotion.matches ? -1 : 0;
+  const art = role.id === "boatman" ? "boat-deck" : role.id;
+  $("scene-art").style.backgroundImage = `url("./assets/${art}.webp")`;
   $("scene-title").textContent = role.name;
-  $("scene-location").textContent = role.location + " · 第一人称";
-  $("scene-progress").value = 0;
-  $("scene-time").textContent = "0:00 / 0:15";
-  $("scene-caption").textContent = role.pins[0];
-  $("scene-pause").textContent = "暂停";
+  $("scene-location").textContent = role.location + (reduceMotion.matches ? " · 第一人称" : " · 拖动画面可环顾");
+  paintStory();
+  showChoices();
   scene.showModal();
   document.body.classList.add("modal-open");
-  const animations = reduceMotion.matches ? [] : [[base, role.camera], [near, role.near]].map(([layer, keyframes]) => layer.animate(
-    keyframes.map((transform, index) => ({ transform, offset: [0, .51, 1][index], easing: "ease-in-out" })),
-    { duration, fill: "forwards" }
-  ));
-  playing = { role, animations, start: performance.now(), elapsed: 0, paused: false, frame: 0, left: viewport.scrollLeft };
   sound.src = `./assets/${role.id}.wav`;
   sound.muted = !soundEnabled;
-  sound.volume = .77;
+  sound.volume = .62;
+  sound.loop = true;
   sound.play().catch(() => {});
-  playing.frame = requestAnimationFrame(tick);
 }
 
-function tick(now) {
-  if (!playing || playing.paused || !scene.open) return;
-  const elapsed = Math.min(duration, Math.max(0, now - playing.start));
-  $("scene-progress").value = elapsed / 1000;
-  $("scene-time").textContent = `0:${String(Math.floor(elapsed / 1000)).padStart(2, "0")} / 0:15`;
-  const caption = playing.role.pins[Math.min(2, Math.floor(elapsed / 5000))];
-  if ($("scene-caption").textContent !== caption) $("scene-caption").textContent = caption;
-  if (elapsed >= duration) {
-    scene.close();
-  } else {
-    playing.frame = requestAnimationFrame(tick);
+function currentBeat() {
+  return stories[playing.role.id][playing.phase];
+}
+
+function moveView() {
+  stage.style.setProperty("--look-x", `${playing.lookX}cqw`);
+  stage.style.setProperty("--look-y", `${playing.lookY}cqh`);
+}
+
+function paintStory() {
+  stage.dataset.phase = playing.phase;
+  stage.style.setProperty("--mast-angle", `${-130 - playing.pulls * 11}deg`);
+  moveView();
+}
+
+function showChoices(restoreFocus = false) {
+  const beat = currentBeat();
+  const steps = playing.phase === "lower" ? ` 已放 ${playing.pulls}/3。` : "";
+  $("scene-caption").textContent = beat.caption + steps;
+  actionList.replaceChildren();
+  for (const { label, ...choice } of beat.actions ?? []) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = label + (choice.pull ? ` · ${playing.pulls}/3` : "");
+    button.addEventListener("click", () => takeAction(choice, true));
+    actionList.append(button);
   }
+  if (!beat.actions) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "返回长卷";
+    button.addEventListener("click", () => scene.close());
+    actionList.append(button);
+  }
+  $("scene-object").hidden = !beat.object;
+  objectButton.disabled = false;
+  objectButton.textContent = beat.object ?? "";
+  objectButton.setAttribute("aria-label", beat.object ?? "");
+  if (restoreFocus) actionList.firstElementChild.focus({ preventScroll: true });
 }
 
-$("scene-back").addEventListener("click", () => scene.close());
-$("scene-pause").addEventListener("click", () => {
-  if (!playing || !scene.open) return;
-  if (playing.paused) {
-    playing.start = performance.now() - playing.elapsed;
-    playing.paused = false;
-    playing.animations.forEach((animation) => animation.play());
-    sound.play().catch(() => {});
-    playing.frame = requestAnimationFrame(tick);
-    $("scene-pause").textContent = "暂停";
+function takeAction(choice, fromControls = false) {
+  if (!playing || playing.timer || !scene.open) return;
+  const run = playing;
+  if (choice.pull) {
+    run.pulls++;
+    run.phase = run.pulls === 3 ? "clear" : "lower";
+    objectButton.animate([{ translate: "0 0" }, { translate: "0 16px" }, { translate: "0 0" }], {
+      duration: reduceMotion.matches ? 1 : 480, easing: "ease-out"
+    });
   } else {
-    playing.elapsed = performance.now() - playing.start;
-    playing.paused = true;
-    playing.animations.forEach((animation) => animation.pause());
-    sound.pause();
-    cancelAnimationFrame(playing.frame);
-    $("scene-pause").textContent = "继续";
+    run.phase = choice.next;
+  }
+  run.lookX = 0;
+  run.lookY = 0;
+  paintStory();
+  for (const button of actionList.children) button.disabled = true;
+  objectButton.disabled = true;
+  if (run.phase !== "lower" && !currentBeat().object) $("scene-object").hidden = true;
+  run.timer = setTimeout(() => {
+    run.timer = 0;
+    if (playing === run && scene.open) showChoices(fromControls);
+  }, reduceMotion.matches ? 0 : choice.motion);
+}
+
+objectButton.addEventListener("click", (event) => {
+  if (!playing || (event.detail > 0 && objectWasDragged)) return;
+  const choice = currentBeat().actions?.[0];
+  if (choice) takeAction(choice, event.detail === 0);
+});
+objectButton.addEventListener("pointerdown", (event) => {
+  if (!playing || playing.timer || !event.isPrimary || event.button !== 0) return;
+  objectWasDragged = false;
+  if (playing.phase !== "lower" && playing.phase !== "holding") return;
+  objectDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, phase: playing.phase };
+  stage.classList.add("handling");
+  objectButton.setPointerCapture(event.pointerId);
+});
+objectButton.addEventListener("pointermove", (event) => {
+  if (objectDrag?.id !== event.pointerId || !playing || playing.phase !== objectDrag.phase) return;
+  const x = event.clientX - objectDrag.x;
+  const y = event.clientY - objectDrag.y;
+  objectWasDragged ||= Math.hypot(x, y) > 8;
+  if (playing.phase === "lower") {
+    const slack = clamp(y, 0, 42);
+    objectButton.style.translate = `0 ${slack}px`;
+    stage.style.setProperty("--mast-angle", `${-130 - playing.pulls * 11 - slack / 42 * 11}deg`);
+  } else {
+    const shiftX = clamp(x, -24, 110);
+    const shiftY = clamp(y, -95, 25);
+    objectButton.style.translate = `${shiftX}px ${shiftY}px`;
+    teaBowl.style.translate = `${shiftX / 1.22}px ${shiftY / 1.22}px`;
   }
 });
+function finishObjectDrag(event) {
+  if (objectDrag?.id !== event.pointerId || !playing) return;
+  const x = event.clientX - objectDrag.x;
+  const y = event.clientY - objectDrag.y;
+  const completed = playing.phase === objectDrag.phase &&
+    (playing.phase === "lower" ? y > 22 : x > 25 || y < -20);
+  objectWasDragged ||= Math.hypot(x, y) > 8;
+  objectDrag = null;
+  stage.classList.remove("handling");
+  objectButton.style.translate = "";
+  teaBowl.style.translate = "";
+  if (event.type === "pointerup" && completed && currentBeat().actions?.[0]) {
+    takeAction(currentBeat().actions[0]);
+  } else {
+    paintStory();
+  }
+}
+for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) {
+  objectButton.addEventListener(type, finishObjectDrag);
+}
+
+sceneLook.addEventListener("pointerdown", (event) => {
+  if (!playing || event.button !== 0 || reduceMotion.matches) return;
+  lookDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, startX: playing.lookX, startY: playing.lookY };
+  sceneLook.setPointerCapture(event.pointerId);
+  sceneLook.classList.add("looking");
+});
+sceneLook.addEventListener("pointermove", (event) => {
+  if (!playing || lookDrag?.id !== event.pointerId) return;
+  playing.lookX = clamp(lookDrag.startX + (event.clientX - lookDrag.x) * 100 / sceneLook.clientWidth, -8, 8);
+  playing.lookY = clamp(lookDrag.startY + (event.clientY - lookDrag.y) * 100 / sceneLook.clientHeight, -7, 7);
+  moveView();
+});
+for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) {
+  sceneLook.addEventListener(type, (event) => {
+    if (lookDrag?.id !== event.pointerId) return;
+    lookDrag = null;
+    sceneLook.classList.remove("looking");
+  });
+}
+sceneLook.addEventListener("keydown", (event) => {
+  if (!playing || reduceMotion.matches) return;
+  switch (event.key) {
+    case "ArrowLeft": playing.lookX = clamp(playing.lookX + 2, -8, 8); break;
+    case "ArrowRight": playing.lookX = clamp(playing.lookX - 2, -8, 8); break;
+    case "ArrowUp": playing.lookY = clamp(playing.lookY + 2, -7, 7); break;
+    case "ArrowDown": playing.lookY = clamp(playing.lookY - 2, -7, 7); break;
+    default: return;
+  }
+  event.preventDefault();
+  moveView();
+});
+
+$("scene-back").addEventListener("click", () => scene.close());
 scene.addEventListener("close", () => {
   if (!playing) return;
-  const { role, frame, animations, left } = playing;
-  cancelAnimationFrame(frame);
-  animations.forEach((animation) => animation.cancel());
+  const { role, timer, left } = playing;
+  clearTimeout(timer);
+  lookDrag = null;
+  objectDrag = null;
+  objectWasDragged = false;
+  stage.classList.remove("handling");
+  sceneLook.classList.remove("looking");
+  objectButton.style.translate = "";
+  teaBowl.style.translate = "";
   sound.pause();
   sound.removeAttribute("src");
   sound.load();
@@ -302,5 +462,6 @@ if (image.complete && image.naturalWidth) {
 
 for (const role of roles) {
   const preloader = new Image();
-  preloader.src = `./assets/${role.id}.webp`;
+  const art = role.id === "boatman" ? "boat-deck" : role.id;
+  preloader.src = `./assets/${art}.webp`;
 }

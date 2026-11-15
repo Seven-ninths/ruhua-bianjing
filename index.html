@@ -34,7 +34,7 @@
           <button type="button" data-go="boatman" aria-pressed="false">虹桥</button>
           <button type="button" data-go="shopkeeper" aria-pressed="false">街市</button>
         </div>
-        <p id="scroll-help">拖动画卷 · 点击画中人物</p>
+        <p id="scroll-help">拖动画卷 · 点击人物参与情景</p>
       </div>
 
       <div class="scroll-frame">
@@ -73,8 +73,21 @@
 
   <dialog id="scene" class="scene-dialog" aria-labelledby="scene-title">
     <div id="scene-stage" class="scene-stage">
-      <div id="scene-art" class="scene-art" aria-hidden="true"></div>
-      <div id="scene-near" class="scene-near" aria-hidden="true"></div>
+      <div id="scene-look" class="scene-look" role="region" tabindex="0" aria-label="第一人称场景，用方向键环顾" title="拖动场景环顾">
+        <div id="scene-world" class="scene-world" aria-hidden="true">
+          <div id="scene-art" class="scene-art"></div>
+          <div class="road-dust"></div>
+          <img class="road-animal" src="./assets/road-traveler.webp" alt="" draggable="false">
+          <div class="boat-water"></div>
+          <div class="mast">
+            <span class="mast-wood"></span>
+            <span class="mast-wrap"></span>
+            <span class="mast-rope"></span>
+          </div>
+          <img class="tea-guest" src="./assets/tea-guest.webp" alt="" draggable="false">
+          <div id="tea-bowl" class="tea-bowl"><span class="tea-steam"></span></div>
+        </div>
+      </div>
       <div class="scene-shade" aria-hidden="true"></div>
       <header class="scene-top">
         <div>
@@ -83,13 +96,12 @@
         </div>
         <button id="scene-back" type="button" class="scene-back">返回长卷 <span aria-hidden="true">×</span></button>
       </header>
+      <div id="scene-object" class="scene-object" hidden>
+        <button id="scene-object-button" type="button"></button>
+      </div>
       <div class="scene-bottom">
-        <p id="scene-caption" class="scene-caption"></p>
-        <div class="playback">
-          <button id="scene-pause" type="button">暂停</button>
-          <progress id="scene-progress" max="15" value="0" aria-label="场景播放进度"></progress>
-          <span id="scene-time">0:00 / 0:15</span>
-        </div>
+        <p id="scene-caption" class="scene-caption" role="status"></p>
+        <div id="scene-actions" class="scene-actions" aria-label="选择下一步"></div>
       </div>
     </div>
   </dialog>
