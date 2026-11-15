@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4eee1">
+  <meta name="description" content="展开《清明上河图》，从郊外的赶路人、虹桥下的船工和街市里的店伙计眼中看汴京。">
+  <title>入画汴京 · 清明上河图互动长卷</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="masthead shell">
+    <a class="wordmark" href="./" aria-label="入画汴京首页">
+      <span class="seal" aria-hidden="true">汴</span>
+      <span>入画汴京</span>
+    </a>
+    <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="true">声音开启</button>
+  </header>
+
+  <main class="shell">
+    <section class="intro" aria-labelledby="title">
+      <div>
+        <h1 id="title">入画汴京</h1>
+        <p class="subtitle">展开《清明上河图》，从画中人的眼睛看一段汴京日常。</p>
+      </div>
+      <p class="painting-credit"><cite>清明上河图</cite><span>北宋 · 张择端 · 绢本设色</span></p>
+    </section>
+
+    <section class="exhibit" aria-label="清明上河图互动长卷">
+      <div class="exhibit-bar">
+        <div class="chapters" role="group" aria-label="跳转到长卷段落">
+          <button type="button" data-go="traveler" aria-pressed="true">城郊</button>
+          <button type="button" data-go="boatman" aria-pressed="false">虹桥</button>
+          <button type="button" data-go="shopkeeper" aria-pressed="false">街市</button>
+        </div>
+        <p id="scroll-help">拖动画卷 · 点击画中人物</p>
+      </div>
+
+      <div class="scroll-frame">
+        <div id="viewport" class="viewport" tabindex="0" aria-label="长卷浏览区" aria-describedby="scroll-help">
+          <div id="world" class="world">
+            <img id="scroll-image" class="scroll-image" src="./assets/scroll.webp" alt="北宋张择端《清明上河图》卷，从右侧的城郊到虹桥，再到左侧街市" draggable="false">
+            <div id="motions" aria-hidden="true"></div>
+            <div id="hotspots"></div>
+          </div>
+        </div>
+        <button id="move-left" class="step step-left" type="button" aria-label="向左浏览，前往街市">‹</button>
+        <button id="move-right" class="step step-right" type="button" aria-label="向右浏览，返回城郊">›</button>
+      </div>
+
+      <div class="overview">
+        <span aria-hidden="true">街市</span>
+        <div id="map" class="map">
+          <img src="./assets/scroll.webp" alt="" draggable="false">
+          <div id="viewfinder" class="viewfinder" aria-hidden="true"></div>
+          <input id="map-range" type="range" min="0" max="1000" value="1000" aria-label="全卷位置，从街市到城郊">
+        </div>
+        <span aria-hidden="true">城郊</span>
+      </div>
+    </section>
+
+    <section class="people" aria-labelledby="people-title">
+      <h2 id="people-title">画中人物</h2>
+      <div id="people-list" class="people-list"></div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <p>《清明上河图》跨媒介再创作 · 新媒体艺术概论课堂实践</p>
+    <div><a href="https://commons.wikimedia.org/wiki/File:Alongtheriver_QingMing.jpg" target="_blank" rel="noopener noreferrer">数字图像来源 ↗</a> <a href="https://www.dpm.org.cn/collection/paint/228226.html?hl=%E3%80%8A%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9C%96%E3%80%8B" target="_blank" rel="noopener noreferrer">原作与馆藏说明 ↗</a></div>
+  </footer>
+
+  <dialog id="scene" class="scene-dialog" aria-labelledby="scene-title">
+    <div id="scene-stage" class="scene-stage">
+      <div id="scene-art" class="scene-art" aria-hidden="true"></div>
+      <div id="scene-near" class="scene-near" aria-hidden="true"></div>
+      <div class="scene-shade" aria-hidden="true"></div>
+      <header class="scene-top">
+        <div>
+          <p id="scene-location"></p>
+          <h2 id="scene-title"></h2>
+        </div>
+        <button id="scene-back" type="button" class="scene-back">返回长卷 <span aria-hidden="true">×</span></button>
+      </header>
+      <div class="scene-bottom">
+        <p id="scene-caption" class="scene-caption"></p>
+        <div class="playback">
+          <button id="scene-pause" type="button">暂停</button>
+          <progress id="scene-progress" max="15" value="0" aria-label="场景播放进度"></progress>
+          <span id="scene-time">0:00 / 0:15</span>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="evidence" class="evidence-dialog" aria-labelledby="evidence-title">
+    <article class="evidence-card">
+      <header>
+        <h2 id="evidence-title"></h2>
+        <form method="dialog"><button type="submit" aria-label="关闭原画依据">×</button></form>
+      </header>
+      <div id="evidence-crop" class="evidence-crop">
+        <img src="./assets/scroll.webp" alt="该人物所在的原画局部">
+        <span class="evidence-pin" aria-hidden="true"></span>
+      </div>
+      <dl>
+        <div><dt>原画所见</dt><dd id="evidence-fact"></dd></div>
+        <div><dt>场景演绎</dt><dd id="evidence-scene"></dd></div>
+      </dl>
+      <a href="https://www.dpm.org.cn/collection/paint/228226.html?hl=%E3%80%8A%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9C%96%E3%80%8B" target="_blank" rel="noopener noreferrer">查看故宫博物院藏品说明 ↗</a>
+    </article>
+  </dialog>
+</body>
+</html>
