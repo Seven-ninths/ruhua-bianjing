@@ -34,7 +34,7 @@
           <button type="button" data-go="boatman" aria-pressed="false">虹桥</button>
           <button type="button" data-go="shopkeeper" aria-pressed="false">街市</button>
         </div>
-        <p id="scroll-help">拖动画卷 · 点击人物参与情景</p>
+        <p id="scroll-help">拖动画卷 · 点击人物进入他的视角</p>
       </div>
 
       <div class="scroll-frame">
@@ -76,8 +76,7 @@
       <div id="scene-look" class="scene-look" role="region" tabindex="0" aria-label="第一人称场景，用方向键环顾" title="拖动场景环顾">
         <div id="scene-world" class="scene-world" aria-hidden="true">
           <div id="scene-art" class="scene-art"></div>
-          <div class="road-dust"></div>
-          <img class="road-animal" src="./assets/road-traveler.webp" alt="" draggable="false">
+          <div class="road-water"></div>
           <div class="boat-water"></div>
           <div class="mast">
             <span class="mast-wood"></span>
@@ -85,7 +84,7 @@
             <span class="mast-rope"></span>
           </div>
           <img class="tea-guest" src="./assets/tea-guest.webp" alt="" draggable="false">
-          <div id="tea-bowl" class="tea-bowl"><span class="tea-steam"></span></div>
+          <div class="tea-bowl"><span class="tea-steam"></span></div>
         </div>
       </div>
       <div class="scene-shade" aria-hidden="true"></div>
@@ -94,14 +93,14 @@
           <p id="scene-location"></p>
           <h2 id="scene-title"></h2>
         </div>
-        <button id="scene-back" type="button" class="scene-back">返回长卷 <span aria-hidden="true">×</span></button>
+        <button id="scene-back" type="button" class="scene-back" autofocus>返回长卷 <span aria-hidden="true">×</span></button>
       </header>
-      <div id="scene-object" class="scene-object" hidden>
-        <button id="scene-object-button" type="button"></button>
-      </div>
       <div class="scene-bottom">
-        <p id="scene-caption" class="scene-caption" role="status"></p>
-        <div id="scene-actions" class="scene-actions" aria-label="选择下一步"></div>
+        <p id="scene-caption" class="scene-caption"></p>
+        <div class="scene-controls">
+          <button id="scene-pause" type="button">停留片刻</button>
+          <span id="scene-hint">拖动画面可环顾</span>
+        </div>
       </div>
     </div>
   </dialog>

@@ -319,8 +319,6 @@ dialog::backdrop { background: #141611c9; }
   overflow: hidden;
   isolation: isolate;
   container-type: size;
-  --look-x: 0cqw;
-  --look-y: 0cqh;
   --move-x: 0cqw;
   --move-y: 0cqh;
   --zoom: 1.18;
@@ -344,14 +342,10 @@ dialog::backdrop { background: #141611c9; }
   top: 50%;
   width: max(100cqw, 177.7cqh);
   aspect-ratio: 1672 / 941;
-  transform: translate(-50%, -50%)
-    translate(calc(var(--look-x) + var(--move-x)), calc(var(--look-y) + var(--move-y)))
-    scale(var(--zoom));
-  transition: transform .9s cubic-bezier(.22,.65,.2,1);
+  transform: translate(-50%, -50%) translate(var(--move-x), var(--move-y)) scale(var(--zoom));
   will-change: transform;
   user-select: none;
 }
-.looking .scene-world { transition-duration: .1s; }
 .scene-art {
   position: absolute;
   inset: 0;
@@ -376,89 +370,57 @@ dialog::backdrop { background: #141611c9; }
 }
 .scene-back span { margin-left: 6px; }
 .scene-back:hover { background: #29261b; }
-.scene-caption { font-size: clamp(.98rem, 1.75vw, 1.2rem); max-width: 38em; text-shadow: 0 1px 5px #21180e; }
-.scene-actions {
+.scene-caption {
+  max-width: 37em;
+  font: 600 clamp(1.04rem, 1.8vw, 1.28rem)/1.6 var(--serif);
+  letter-spacing: .025em;
+  text-shadow: 0 1px 6px #21180e;
+}
+.scene-controls {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 13px;
+  gap: 6px 12px;
+  margin-top: 12px;
 }
-.scene-actions button, .scene-object button {
-  padding: 8px 15px;
-  border: 1px solid #e2c59a;
-  border-radius: 4px;
-  background: #faecd2;
-  color: #352717;
-  box-shadow: 0 3px 10px #29180d60;
-}
-.scene-actions button:first-child { background: #8e3f33; border-color: #c88368; color: #fff4dd; }
-.scene-actions button:hover:not(:disabled), .scene-object button:hover:not(:disabled) { filter: brightness(1.12); }
-.scene-actions button:disabled, .scene-object button:disabled { opacity: .66; }
-.scene-object {
-  position: absolute;
-  z-index: 2;
-  left: 49%;
-  top: 62%;
-  transform: translate(-50%, -50%);
-}
-.scene-object button {
+#scene-pause {
+  min-width: 58px;
+  min-height: 34px;
   padding: 4px 10px;
-  font-size: .87rem;
-  touch-action: none;
+  border: 1px solid #f1e2bd70;
+  border-radius: 4px;
+  background: #1f1d1466;
+  color: #fff6e6;
+  font-size: .84rem;
 }
-.scene-object button::before { content: "◆"; margin-right: 6px; color: var(--cinnabar); font-size: .7rem; }
-.scene-stage[data-phase="lower"] .scene-object button { cursor: ns-resize; }
-.scene-stage[data-phase="holding"] .scene-object { left: 56%; top: 65%; }
-.scene-stage[data-phase="holding"] .scene-object button { cursor: grab; }
-.scene-stage.handling[data-phase="holding"] .scene-object button { cursor: grabbing; }
-.scene-stage.handling .mast { transition-duration: .08s; }
+#scene-pause:hover { background: #29261b; }
+#scene-hint { color: #e7d7bd; font-size: .82rem; text-shadow: 0 1px 4px #21180e; }
+.scene-dialog button:focus-visible { outline-color: #f4cc8a; }
 
-.road-animal, .road-dust, .boat-water, .mast, .tea-guest, .tea-bowl { display: none; position: absolute; }
-.scene-stage[data-role="traveler"] .road-animal,
-.scene-stage[data-role="traveler"] .road-dust,
+.road-water, .boat-water, .mast, .tea-guest, .tea-bowl { display: none; position: absolute; }
+.scene-stage[data-role="traveler"] .road-water,
 .scene-stage[data-role="boatman"] .boat-water,
 .scene-stage[data-role="boatman"] .mast,
 .scene-stage[data-role="shopkeeper"] .tea-guest,
 .scene-stage[data-role="shopkeeper"] .tea-bowl { display: block; }
 
-.road-animal {
-  top: 52%;
-  left: 40%;
-  width: 14%;
-  opacity: 0;
-  filter: drop-shadow(0 6px 3px #6e4b3444);
-  transform-origin: 45% 90%;
-  transform: translate(45%, -16%) scale(.52);
-  transition: transform 1.4s ease, opacity .65s ease;
-}
-.road-dust {
-  left: 31%;
-  top: 68%;
-  height: 14%;
-  width: 24%;
-  background: radial-gradient(ellipse at 45% 66%, #dec2979c, transparent 65%);
-  opacity: 0;
+.road-water {
+  inset: 55% 0 12% 54%;
   pointer-events: none;
+  overflow: hidden;
+  mask-image: radial-gradient(ellipse at 68% 52%, #000 12%, #0009 48%, transparent 72%);
 }
-.scene-stage[data-phase="encounter"] { --move-x: 5cqw; --move-y: 1cqh; --zoom: 1.26; }
-[data-phase="encounter"] .road-animal {
-  transform: translate(1%, 5%) scale(.91);
-  opacity: 1;
-  animation: hoof-step .42s ease-in-out 4 alternate;
+.road-water::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  background: repeating-linear-gradient(179deg, transparent 0 12px, #fcf1cd69 13px, transparent 15px 24px);
+  animation: road-shimmer 5.2s ease-in-out infinite alternate;
 }
-.scene-stage[data-phase="riverbank"] { --move-x: -6cqw; --move-y: 2cqh; --zoom: 1.28; }
-.scene-stage[data-phase="fence"] { --move-x: 9cqw; --move-y: -2cqh; --zoom: 1.25; }
-[data-phase="riverbank"] .road-animal,
-[data-phase="fence"] .road-animal {
-  transform: translate(-205%, 21%) scale(1.33);
-  opacity: .08;
-  animation: hoof-step .38s ease-in-out 4 alternate;
+@keyframes road-shimmer {
+  from { opacity: .12; transform: translate(-2%, -4%); }
+  to { opacity: .45; transform: translate(2%, 4%); }
 }
-[data-phase="riverbank"] .road-dust,
-[data-phase="fence"] .road-dust { animation: trail-dust 1.55s ease-out both; }
-.scene-stage[data-phase="arrived"] { --move-x: 1cqw; --move-y: 5cqh; --zoom: 1.4; }
-@keyframes hoof-step { from { translate: 0 -2px; } to { translate: 0 4px; } }
-@keyframes trail-dust { 28% { opacity: .7; } to { transform: translate(-34%, 0) scale(1.4); opacity: 0; } }
 
 .boat-water {
   inset: 54% 5% 23%;
@@ -475,7 +437,6 @@ dialog::backdrop { background: #141611c9; }
   height: 4.8%;
   transform: translateY(-50%) rotate(var(--mast-angle, -130deg));
   transform-origin: left center;
-  transition: transform .65s ease-out;
   filter: drop-shadow(1px 4px 2px #38230c62);
 }
 .mast-wood {
@@ -507,43 +468,30 @@ dialog::backdrop { background: #141611c9; }
   height: 43cqh;
   transform: rotate(calc(-1 * var(--mast-angle, -130deg) - 28deg));
   transform-origin: top center;
-  transition: transform .65s ease-out;
   background: repeating-linear-gradient(140deg, #70532e 0 2px, #ceb383 3px 4px);
   border-radius: 4px;
 }
-.scene-stage[data-phase="check"] { --move-y: 8cqh; --zoom: 1.32; }
-.scene-stage[data-phase="lower"] { --move-y: -5cqh; --zoom: 1.28; }
-.scene-stage[data-phase="clear"] { --move-y: -1cqh; --zoom: 1.22; }
-.scene-stage[data-phase="passed"] { --move-y: 13cqh; --zoom: 1.54; }
-[data-phase="passed"] .boat-water { opacity: 1; }
-
 .tea-guest {
   left: 57%;
   bottom: 16%;
   height: 51%;
   width: auto;
-  transform: translate(-5%, -5%) scale(.48);
+  transform: translateX(var(--guest-x, -5%)) scale(var(--guest-scale, .48));
   transform-origin: center bottom;
-  transition: transform .9s ease-out, opacity .5s;
   filter: drop-shadow(-.8px 1px 1px #3626104c);
-  opacity: .75;
   clip-path: inset(0 0 8% 0);
 }
-[data-phase="greet"] .tea-guest,
-[data-phase="holding"] .tea-guest { transform: translate(-12%, 0) scale(1); opacity: 1; }
-[data-phase="served"] .tea-guest { transform: translate(-6%, -1%) rotate(3deg) scale(.91); opacity: 1; }
 .tea-bowl {
-  left: 53%;
-  top: 85%;
+  left: var(--bowl-x, 53%);
+  top: var(--bowl-y, 85%);
   width: 5.1%;
   height: 5%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(var(--bowl-scale, 1));
   transform-origin: center;
   background: linear-gradient(100deg, #686343, #aaa982 54%, #736d4b);
   border: 1px solid #665638;
   border-radius: 12% 12% 42% 42% / 19% 19% 80% 80%;
   box-shadow: 1px 4px 3px #32241867;
-  transition: left .76s ease, top .76s ease, transform .76s ease;
 }
 .tea-bowl::before {
   content: "";
@@ -570,9 +518,9 @@ dialog::backdrop { background: #141611c9; }
   animation: tea-steam 1.7s ease-out infinite;
 }
 @keyframes tea-steam { from { opacity: .2; transform: scale(.6); } 40% { opacity: .6; } to { opacity: 0; transform: translate(30%, -40%) scale(1.35); } }
-.scene-stage[data-role="shopkeeper"][data-phase="holding"] { --move-y: -5cqh; --zoom: 1.22; }
-[data-phase="holding"] .tea-bowl { top: 69%; transform: translate(-42%, -50%) scale(1.3); }
-[data-phase="served"] .tea-bowl { left: 60%; top: 59.7%; transform: translate(-40%, -50%) scale(.7); }
+.scene-stage[data-paused="true"] .road-water::before,
+.scene-stage[data-paused="true"] .boat-water,
+.scene-stage[data-paused="true"] .tea-steam { animation-play-state: paused; }
 
 .evidence-dialog {
   width: min(600px, calc(100% - 36px));
@@ -640,13 +588,12 @@ dialog::backdrop { background: #141611c9; }
   .scene-stage { height: min(136vw, calc(100dvh - 28px)); min-height: 0; }
   .scene-top { align-items: start; }
   .scene-back { padding: 5px 7px; font-size: .8rem; }
-  .scene-object { top: 58%; }
-  .scene-stage[data-phase="holding"] .scene-object { top: 61%; }
-  .scene-actions { gap: 6px; margin-top: 9px; }
-  .scene-actions button { padding: 6px 10px; font-size: .88rem; }
+  .scene-controls { gap: 5px 9px; margin-top: 9px; }
+  #scene-pause { padding: 4px 9px; }
+  #scene-hint { font-size: .77rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .water::after, .scene-world *, .scene-world { animation: none !important; transition-duration: 0s !important; }
+  .water::after, .road-water::before, .boat-water, .tea-steam { animation: none; }
 }
 @media (max-height: 480px) and (min-width: 521px) {
   .scene-stage { min-height: 0; }
