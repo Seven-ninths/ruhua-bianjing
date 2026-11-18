@@ -1,0 +1,53 @@
+(() => {
+  "use strict";
+
+  // Load before app.js and merge these fields into the matching journeys.
+  // Repeated camera poses mark a deliberate pause at the counter or river bend.
+  const footsteps = (from, until, interval) => Array.from(
+    { length: Math.floor((until - from) / interval) + 1 },
+    (_, index) => Number((from + index * interval).toFixed(2))
+  );
+
+  window.sceneJourneyEnhancements = {
+    traveler: {
+      audio: new URL('./assets/traveler-journey.wav', document.currentScript.src).href,
+      camera: [
+        [0, 42.5, 58.6, 1.26],
+        [1.2, 42.5, 58.6, 1.26],
+        [6, 42.8, 56.4, 1.38],
+        [13, 44.5, 53.4, 1.57],
+        [22.7, 48.7, 49, 1.86],
+        [24.6, 49, 48.8, 1.89],
+        [27, 49, 48.8, 1.89],
+      ],
+      captions: [
+        [0, "从柳树旁的篱笆口出发，沿着土路向河湾走。"],
+        [6.3, "背篓随着前面人的脚步轻晃，他沿土路走远。"],
+        [14, "河水就在右手边，岸上的小船随水轻晃。"],
+        [24.6, "到了河湾，停下脚步，看看前方的屋舍和来往的人。"],
+      ],
+      walkWindow: [1.2, 24.6],
+      footsteps: footsteps(1.35, 24.1, .62),
+    },
+    shopkeeper: {
+      audio: new URL('./assets/shopkeeper-journey.wav', document.currentScript.src).href,
+      camera: [
+        [0, 46.5, 57.1, 1.15],
+        [3.5, 46.5, 57.1, 1.15],
+        [6.4, 47.8, 54.9, 1.18],
+        [11, 52.5, 51, 1.32],
+        [16.8, 61.2, 48.5, 1.55],
+        [18.8, 63.5, 47.9, 1.64],
+        [22, 63.5, 47.9, 1.64],
+      ],
+      captions: [
+        [0, "你站在柜台后，面前的碗盏和货物挡住了一小段街面。"],
+        [4.5, "客人扶稳篮子。你沿柜台往铺口走，街上的车轮声近了。"],
+        [11.8, "从客人身旁望出去，街边的大人和孩子正往前走。"],
+        [18.8, "到了铺口，停下来看看这条街。"],
+      ],
+      walkWindow: [4.5, 18.8],
+      footsteps: footsteps(4.8, 18.2, .65),
+    },
+  };
+})();

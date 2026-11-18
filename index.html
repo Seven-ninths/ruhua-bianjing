@@ -7,6 +7,18 @@
   <meta name="description" content="展开《清明上河图》，从郊外的赶路人、虹桥下的船工和街市里的店伙计眼中看汴京。">
   <title>入画汴京 · 清明上河图互动长卷</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./exhibit.css">
+  <script defer src="./scroll-people.js"></script>
+  <script defer src="./traveler-people.js"></script>
+  <script defer src="./road-atmosphere.js"></script>
+  <script defer src="./boat-people.js"></script>
+  <script defer src="./boat-view.js"></script>
+  <script defer src="./river-atmosphere.js"></script>
+  <script defer src="./river-traffic.js"></script>
+  <script defer src="./boat-rig.js"></script>
+  <script defer src="./boat-audio-cues.js"></script>
+  <script defer src="./shop-people.js"></script>
+  <script defer src="./scene-journeys.js"></script>
   <script defer src="./app.js"></script>
 </head>
 <body>
@@ -34,14 +46,15 @@
           <button type="button" data-go="boatman" aria-pressed="false">虹桥</button>
           <button type="button" data-go="shopkeeper" aria-pressed="false">街市</button>
         </div>
-        <p id="scroll-help">拖动画卷 · 点击人物进入他的视角</p>
+        <div class="exhibit-actions">
+          <button id="enter-current" class="enter-current" type="button"><span id="enter-current-label">跟赶路人沿汴河往城里走</span><span aria-hidden="true">↗</span></button>
+        </div>
       </div>
 
       <div class="scroll-frame">
         <div id="viewport" class="viewport" tabindex="0" aria-label="长卷浏览区" aria-describedby="scroll-help">
           <div id="world" class="world">
             <img id="scroll-image" class="scroll-image" src="./assets/scroll.webp" alt="北宋张择端《清明上河图》卷，从右侧的城郊到虹桥，再到左侧街市" draggable="false">
-            <div id="motions" aria-hidden="true"></div>
             <div id="hotspots"></div>
           </div>
         </div>
@@ -49,6 +62,10 @@
         <button id="move-right" class="step step-right" type="button" aria-label="向右浏览，返回城郊">›</button>
       </div>
 
+      <div class="scroll-guide">
+        <p id="scroll-help">拖动画卷浏览，点画中人物也能进入视角。</p>
+        <span id="current-location" class="current-location">城郊 · 赶路人</span>
+      </div>
       <div class="overview">
         <span aria-hidden="true">街市</span>
         <div id="map" class="map">
@@ -76,15 +93,6 @@
       <div id="scene-look" class="scene-look" role="region" tabindex="0" aria-label="第一人称场景，用方向键环顾" title="拖动场景环顾">
         <div id="scene-world" class="scene-world" aria-hidden="true">
           <div id="scene-art" class="scene-art"></div>
-          <div class="road-water"></div>
-          <div class="boat-water"></div>
-          <div class="mast">
-            <span class="mast-wood"></span>
-            <span class="mast-wrap"></span>
-            <span class="mast-rope"></span>
-          </div>
-          <img class="tea-guest" src="./assets/tea-guest.webp" alt="" draggable="false">
-          <div class="tea-bowl"><span class="tea-steam"></span></div>
         </div>
       </div>
       <div class="scene-shade" aria-hidden="true"></div>
@@ -92,13 +100,17 @@
         <div>
           <p id="scene-location"></p>
           <h2 id="scene-title"></h2>
+          <ol id="scene-phases" class="scene-phases" aria-label="过桥进程" hidden>
+            <li>进桥</li><li>放桅</li><li>出桥</li>
+          </ol>
         </div>
         <button id="scene-back" type="button" class="scene-back" autofocus>返回长卷 <span aria-hidden="true">×</span></button>
       </header>
       <div class="scene-bottom">
-        <p id="scene-caption" class="scene-caption"></p>
+        <p id="scene-caption" class="scene-caption" aria-live="polite"></p>
         <div class="scene-controls">
-          <button id="scene-pause" type="button">停留片刻</button>
+          <button id="scene-evidence" class="scene-control scene-control-primary" type="button" hidden>查看原画依据</button>
+          <button id="scene-pause" class="scene-control" type="button">停留片刻</button>
           <span id="scene-hint">拖动画面可环顾</span>
         </div>
       </div>
@@ -111,9 +123,18 @@
         <h2 id="evidence-title"></h2>
         <form method="dialog"><button type="submit" aria-label="关闭原画依据">×</button></form>
       </header>
-      <div id="evidence-crop" class="evidence-crop">
-        <img src="./assets/scroll.webp" alt="该人物所在的原画局部">
-        <span class="evidence-pin" aria-hidden="true"></span>
+      <div class="evidence-compare">
+        <figure>
+          <figcaption>原画局部</figcaption>
+          <div id="evidence-crop" class="evidence-image evidence-crop">
+            <img src="./assets/scroll.webp" alt="该场景所在的原画局部">
+            <span class="evidence-pin" aria-hidden="true"></span>
+          </div>
+        </figure>
+        <figure>
+          <figcaption>第一人称场景</figcaption>
+          <img id="evidence-still" class="evidence-image evidence-still" alt="">
+        </figure>
       </div>
       <dl>
         <div><dt>原画所见</dt><dd id="evidence-fact"></dd></div>
