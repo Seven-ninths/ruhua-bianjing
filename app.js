@@ -1,10 +1,6 @@
 "use strict";
 
-const boatAudio = window.boatAudioCues;
-const boatCues = Object.fromEntries((boatAudio?.cues ?? []).map(cue => [cue.id, cue]));
-const releaseOne = boatCues["first-release"] ?? { start: 6.15, end: 7.35 };
-const releaseTwo = boatCues["second-release"] ?? { start: 9.25, end: 10.60 };
-const releaseThree = boatCues["final-release"] ?? { start: 12.42, end: 13.70 };
+const firstReleaseAt = 6.15;
 const openRiverAt = 15.6;
 
 const roles = [
@@ -12,59 +8,54 @@ const roles = [
     id: "traveler", location: "城郊", name: "赶路人",
     x: 79.79, y: 82.5, label: "沿汴河往城里走", entry: "跟赶路人沿汴河往城里走",
     fact: "画卷前段表现汴京城郊。道路穿过田野与低矮屋舍，路上可见往来的人物。",
-    staging: "土路、屋舍和沿河行旅取意于画卷。短场景里的行进路线和相伴的环境声是艺术演绎。"
+    staging: "土路、屋舍和沿河行旅取意于画卷。短场景里的行进路线是艺术演绎。"
   },
   {
     id: "boatman", location: "虹桥", name: "船工",
     x: 51.62, y: 30.5, label: "随漕船驶出虹桥", entry: "跟船工驶出虹桥",
     fact: "桥下的漕船正放倒桅杆，准备穿过桥孔。船工忙着操作，桥上有人驻足观看。",
-    staging: "画中船工放低桅杆的动作是设计依据。视线、放桅的节奏和过桥时的声响是情景演绎。"
+    staging: "画中船工放低桅杆的动作是设计依据。甲板上的视线和放桅的节奏是情景演绎。"
   },
   {
     id: "shopkeeper", location: "街市", name: "店伙计",
     x: 15.83, y: 43, label: "沿柜台走到铺口", entry: "跟店伙计走到铺口",
     fact: "长卷后段描绘临街商铺与穿行其间的人物。沿街店面与道路直接相连。",
-    staging: "在柜台后看到客人驻足，是根据画中街市和店铺设计的情景。客人的动作、布棚和环境声属于情景演绎。"
+    staging: "在柜台后看到客人驻足，是根据画中街市和店铺设计的情景。客人的动作和布棚的变化属于情景演绎。"
   }
 ];
 
 const journeys = {
   traveler: {
     duration: 27,
-    volume: .53,
     // Seconds, center in the painting (%), and camera scale.
     camera: [[0, 42.5, 58.6, 1.26], [5.5, 42.5, 56.6, 1.37], [12, 44, 54.2, 1.54], [19, 46.3, 51.6, 1.72], [27, 49, 48.8, 1.89]],
     captions: [
-      [0, "柳影落在土路上，脚步声伴着河水。"],
+      [0, "柳影落在土路上，河水沿岸流过。"],
       [9, "沿着河湾转过去，一艘小船静静靠在岸边。"],
-      [18, "前面的屋舍渐密，路上的人声近了些。"]
+      [18, "前面的屋舍渐密，路上的行人多了些。"]
     ]
   },
   boatman: {
-    duration: boatAudio?.duration ?? 23,
-    volume: boatAudio?.suggestedVolume ?? .56,
-    audio: boatAudio?.source,
+    duration: 23,
     camera: [[0, 49, 48, 1.16], [5, 50, 51, 1.19], [10, 50.5, 54, 1.22], [14, 51, 53, 1.23], [19, 52, 51, 1.23], [23, 52.5, 51, 1.24]],
     shore: [[0, 0, 0, 1], [5, .4, -.6, 1.12], [10, -.9, -3, 1.36], [14, -2, -6.6, 1.72], [18.8, -3, -10.5, 2.01], [23, -3.4, -11.3, 2.13]],
     mast: [
-      [0, 0], [releaseOne.start, 0], [releaseOne.end, -2.3],
-      [releaseTwo.start, -2.3], [releaseTwo.end, -4.6],
-      [releaseThree.start, -4.6], [releaseThree.end, -7],
+      [0, 0], [firstReleaseAt, 0], [7.35, -2.3],
+      [9.25, -2.3], [10.6, -4.6], [12.42, -4.6], [13.7, -7],
     ],
     light: [[0, 1], [5, .88], [12, .9], [14, .95], [18.8, 1.07], [23, 1.07]],
-    phases: [0, releaseOne.start, openRiverAt],
+    phases: [0, firstReleaseAt, openRiverAt],
     captions: [
-      [0, "你站在甲板上，木梁从头顶掠过，桥下传来水声。"],
-      [releaseOne.start, "同伴分几次松绳，桅杆一寸寸放低。"],
+      [0, "你站在甲板上，木梁从头顶掠过，船身随水轻晃。"],
+      [firstReleaseAt, "同伴分几次松绳，桅杆一寸寸放低。"],
       [openRiverAt, "船出了桥洞。水面亮起来，另一艘小船从前方驶过。"]
     ]
   },
   shopkeeper: {
     duration: 22,
-    volume: .55,
     camera: [[0, 46.5, 57.1, 1.15], [5, 46, 55.3, 1.18], [10, 51, 51, 1.30], [16, 58, 49.1, 1.50], [22, 63.5, 47.9, 1.64]],
     captions: [
-      [0, "对街的摊子冒着热气，车轮声从布棚外传来。"],
+      [0, "对街的摊子冒着热气，一辆推车从布棚外经过。"],
       [6, "柜台前的客人扶稳篮子。你沿着柜台走向铺口。"],
       [15, "你站到铺口，望着街边的人往虹桥方向走去。"]
     ]
@@ -82,9 +73,7 @@ const range = $("map-range");
 const scene = $("scene");
 const evidence = $("evidence");
 const currentEntry = $("enter-current");
-const soundToggle = $("sound-toggle");
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-const sound = new Audio();
 const visited = new Set();
 let activeRole;
 let evidenceRole;
@@ -92,7 +81,6 @@ let evidenceTrigger;
 let playing = null;
 let worldRatio = 21.333;
 let initialized = false;
-let soundEnabled = true;
 let drag = null;
 let scrollFrame = 0;
 
@@ -264,10 +252,6 @@ function openScene(role, trigger) {
   document.body.classList.add("modal-open");
   measureScene();
   updateSceneControls();
-  sound.src = route.audio ?? `./assets/${role.id}.wav`;
-  sound.muted = !soundEnabled;
-  sound.volume = 0;
-  sound.loop = !route.audio;
   resumeJourney();
 }
 
@@ -320,10 +304,8 @@ function drawJourney(run) {
   const envelope = Math.min(1, motionTime / 1.5, (route.duration - motionTime) / 2.5);
   const [walkStart, walkEnd] = route.walkWindow ?? [0, route.duration];
   const step = clamp(Math.min((motionTime - walkStart) / 1.25, (walkEnd - motionTime) / 1.4), 0, 1);
-  const footsteps = route.footsteps;
-  const gait = footsteps
-    ? (motionTime - footsteps[0]) * Math.PI / (footsteps[1] - footsteps[0])
-    : motionTime * Math.PI * 2 * .83;
+  const [firstStep, stepInterval] = route.stepTiming ?? [0, 1 / 1.66];
+  const gait = (motionTime - firstStep) * Math.PI / stepInterval;
   let side = 0;
   let rise = 0;
   let roll = 0;
@@ -405,15 +387,9 @@ function advanceJourney(now) {
   if (!run || run.paused || !scene.open) return;
   const delta = run.lastTime ? Math.min(now - run.lastTime, 100) / 1000 : 0;
   run.lastTime = now;
-  const audioTime = run.route.audio && !sound.paused && !sound.seeking && sound.currentTime > 0
-    ? sound.currentTime
-    : run.elapsed + delta;
-  run.elapsed = Math.min(Math.max(run.elapsed, audioTime), run.route.duration);
+  run.elapsed = Math.min(run.elapsed + delta, run.route.duration);
   drawJourney(run);
-  const fade = clamp(Math.min(run.elapsed / .8, (run.route.duration - run.elapsed) / 3), 0, 1);
-  sound.volume = run.route.volume * fade;
   if (run.elapsed >= run.route.duration) {
-    sound.pause();
     run.frame = 0;
     updateSceneControls();
   } else {
@@ -425,7 +401,6 @@ function resumeJourney() {
   playing.paused = false;
   playing.lastTime = 0;
   updateSceneControls();
-  sound.play().catch(() => {});
   playing.frame = requestAnimationFrame(advanceJourney);
 }
 
@@ -434,8 +409,6 @@ function toggleJourney() {
   const run = playing;
   if (run.elapsed >= run.route.duration) {
     run.elapsed = run.lookX = run.lookY = 0;
-    sound.currentTime = 0;
-    sound.volume = 0;
     drawJourney(run);
     resumeJourney();
   } else if (run.paused) {
@@ -443,18 +416,12 @@ function toggleJourney() {
   } else {
     run.paused = true;
     cancelAnimationFrame(run.frame);
-    sound.pause();
     updateSceneControls();
   }
 }
 
 pauseButton.addEventListener("click", toggleJourney);
 sceneEvidence.addEventListener("click", () => scene.close("evidence"));
-sound.addEventListener("playing", () => {
-  if (playing?.route.audio && Math.abs(sound.currentTime - playing.elapsed) > .16) {
-    sound.currentTime = playing.elapsed;
-  }
-});
 sceneLook.addEventListener("pointerdown", (event) => {
   if (!playing || lookDrag || event.button !== 0 || reduceMotion.matches) return;
   lookDrag = { id: event.pointerId, x: event.clientX, y: event.clientY, startX: playing.lookX, startY: playing.lookY };
@@ -503,9 +470,6 @@ scene.addEventListener("close", () => {
   lookDrag = null;
   sceneLook.classList.remove("looking");
   role.hotspot.classList.remove("entering");
-  sound.pause();
-  sound.removeAttribute("src");
-  sound.load();
   playing = null;
   document.body.classList.remove("modal-open");
   viewport.scrollLeft = left;
@@ -547,12 +511,6 @@ evidence.addEventListener("close", () => {
   document.body.classList.remove("modal-open");
   evidenceTrigger?.focus({ preventScroll: true });
   evidenceRole = evidenceTrigger = null;
-});
-soundToggle.addEventListener("click", () => {
-  soundEnabled = !soundEnabled;
-  sound.muted = !soundEnabled;
-  soundToggle.setAttribute("aria-pressed", String(soundEnabled));
-  soundToggle.textContent = soundEnabled ? "声音开启" : "声音关闭";
 });
 
 new ResizeObserver(sizeWorld).observe(viewport);

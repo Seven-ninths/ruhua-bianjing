@@ -53,18 +53,6 @@ p, h1, h2 { margin: 0; }
   font-size: 19px;
   letter-spacing: 0;
 }
-.sound-toggle {
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  padding: 6px 13px;
-  background: transparent;
-  font-size: .8rem;
-  color: var(--muted);
-}
-.sound-toggle:hover { background: #ebe2d1; }
-.sound-toggle::before { content: "◖))"; margin-right: 7px; color: var(--cinnabar); }
-.sound-toggle[aria-pressed="false"]::before { content: "◖×"; }
-
 .intro {
   display: flex;
   align-items: end;
